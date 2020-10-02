@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\MemeRequest;
 use App\Models\Meme;
-use Illuminate\Contracts\Cache\Store;
+
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
@@ -79,8 +80,11 @@ class MemeController extends Controller
         $meme = Meme::where('public_name', $memeName)->first();
 
 
+        $file  = Cache::get('key', function () use ($meme) {
+            return Storage::get("$meme->location");
+        });
 
-        return response(Storage::get("$meme->location"))->header('content-type', "$meme->mime");
+        return response($file)->header('content-type', "$meme->mime");
     }
 
 

@@ -3,7 +3,7 @@
     <template v-for="meme in memes">
       <div :key="meme.id" class="meme">
         <img
-          class="img-fluid mt-1"
+          class="img-fluid mt-5"
           :src="`/memes/content/${meme.public_name}`"
         />
       </div>
