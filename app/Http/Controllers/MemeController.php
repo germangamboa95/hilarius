@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
 
 class MemeController extends Controller
 {
@@ -79,10 +80,20 @@ class MemeController extends Controller
     {
         $meme = Meme::where('public_name', $memeName)->first();
 
+        $key = "image_$memeName";
 
-        $file  = Cache::remember("image_$memeName", 604800, function () use ($meme) {
-            return Storage::get("$meme->location");
-        });
+        $cache = Cache::store();
+
+
+
+        $file  = Storage::get("$meme->location");
+
+        $img = Image::cache(function ($image) use ($file) {
+            return $image->make($file);
+        }, 10, true);
+
+        return $img->response();
+
 
         return response($file)->header('content-type', "$meme->mime");
     }
