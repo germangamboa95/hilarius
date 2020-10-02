@@ -21,7 +21,7 @@ class MemeController extends Controller
      */
     public function index()
     {
-        return Meme::all();
+        return Meme::orderBy('created_at', 'desc')->get();
     }
 
     /**
