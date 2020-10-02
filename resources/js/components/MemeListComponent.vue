@@ -28,6 +28,12 @@ export default {
 
 <style>
 .meme {
-  width: 50%;
+  width: 100%;
+}
+
+@media screen and (min-width: 500px) {
+  .meme {
+    width: 60%;
+  }
 }
 </style>
