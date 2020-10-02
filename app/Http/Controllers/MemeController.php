@@ -89,7 +89,7 @@ class MemeController extends Controller
         $file  = Storage::get("$meme->location");
 
         $img = Image::cache(function ($image) use ($file) {
-            return $image->make($file);
+            return $image->make($file)->encode('webp');
         }, 10, true);
 
         return $img->response();
