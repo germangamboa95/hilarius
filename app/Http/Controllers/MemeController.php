@@ -77,13 +77,10 @@ class MemeController extends Controller
      */
     public function loadMeme($memeName)
     {
-        $meme = Cache::get($memeName, function () use ($memeName) {
+        $meme = Meme::where('public_name', $memeName)->first();
 
-            return Meme::where('public_name', $memeName)->first();
-        });
 
-        $file  = Cache::get($memeName, function () use ($meme) {
-
+        $file  = Cache::remember("image_$memeName", 604800, function () use ($meme) {
             return Storage::get("$meme->location");
         });
 
