@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\MemeController;
+use App\Models\Meme;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -16,7 +17,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $memes =  Meme::orderBy('created_at', 'DESC')->paginate(5);
+    return view('welcome', compact('memes'));
 })->name('meme:list');
 
 Auth::routes();

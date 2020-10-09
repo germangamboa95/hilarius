@@ -80,22 +80,13 @@ class MemeController extends Controller
     {
         $meme = Meme::where('public_name', $memeName)->first();
 
-        $key = "image_$memeName";
-
-        $cache = Cache::store();
-
-
-
         $file  = Storage::get("$meme->location");
 
         $img = Image::cache(function ($image) use ($file) {
-            return $image->make($file);
+            return $image->make($file)->encode('webp');
         }, 10, true);
 
         return $img->response();
-
-
-        return response($file)->header('content-type', "$meme->mime");
     }
 
 
