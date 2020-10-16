@@ -2,7 +2,10 @@
 
 use App\Http\Controllers\MemeController;
 use App\Models\Meme;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,8 +19,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    $memes =  Meme::orderBy('created_at', 'DESC')->paginate(5);
+Route::get('/', function (Request $request) {
+    $memes = Cache::remember($request->fullUrl(), now()->addHour(), function () {
+        return Meme::orderBy('created_at', 'DESC')->paginate(5);
+    });
     return view('welcome', compact('memes'));
 })->name('meme:list');
 
