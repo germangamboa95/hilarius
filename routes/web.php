@@ -20,9 +20,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function (Request $request) {
-    $memes = Cache::remember($request->fullUrl(), now()->addHour(), function () {
-        return Meme::orderBy('created_at', 'DESC')->paginate(5);
-    });
+    $memes =  Meme::orderBy('created_at', 'DESC')->paginate(5);
     return view('welcome', compact('memes'));
 })->name('meme:list');
 

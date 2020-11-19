@@ -21,7 +21,7 @@ class MemeController extends Controller
      */
     public function index()
     {
-        return Meme::orderBy('created_at', 'desc')->get();
+        return Meme::orderBy('created_at', 'desc')->with('user')->get();
     }
 
     /**
@@ -57,7 +57,9 @@ class MemeController extends Controller
         $mime = $file->getClientMimeType();
 
 
-        Meme::create([
+
+
+        auth()->user()->memes()->create([
             'public_name' => $name,
             'original_name' => $name,
             'mime' => $mime,
